@@ -1,0 +1,58 @@
+########
+# ec2 security groups management
+#######
+#
+##
+### vpc's
+#   vpc-[]    -   X.X.X.X/XX
+#   vpc-[]    -   Y.Y.Y.Y/YY
+#   
+##
+### sample role
+##
+#
+#   - role: ec2_sg
+#     sg_name: sg_[service]
+#     sg_description: sg [service]
+#     sg_region: us-east-1
+#     vpc_subnet_id: vpc-[]
+#     rules:
+#       - proto: tcp
+#         port: 80
+#         source: 0.0.0.0/0
+#       - proto: tcp
+#         port: 443
+#         source:0.0.0.0/0
+
+
+
+- name: ec2 security groups management
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: yes
+  roles:
+   - role: ec2_sg         # Load balancers Security Group
+     sg_name: sg_lb
+     sg_description: sg load balancer
+     sg_region: us-east-1
+     vpc_subnet_id: vpc-[]
+     rules:
+       - proto: tcp
+         port: 80
+         source: 0.0.0.0/0
+       - proto: tcp
+         port: 443
+         source: 0.0.0.0/0
+   - role: ec2_sg         # Monitoring  Security Group
+     sg_name: sg_monitoring
+     sg_description: sg_monitoring
+     sg_region: us-east-1
+     vpc_subnet_id: vpc-[]
+     rules:
+       - proto: tcp
+         port: 5666
+         source: [X.X.X.X/XX]
+       - proto: icmp
+         port: -1
+         source: [X.X.X.X/XX]

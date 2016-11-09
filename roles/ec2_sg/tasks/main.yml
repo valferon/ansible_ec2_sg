@@ -1,0 +1,18 @@
+---
+- name: Creating security group "{{ sg_name }}" "{{ sg_description }}"
+  ec2_group:
+    name: "{{ sg_name }}"
+    description: "{{ sg_description }}"
+    vpc_id: "{{ vpc_subnet_id }}"
+    region: "{{ sg_region }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    rules:
+      - proto: "{{ item['proto'] }}"
+        from_port: "{{ item['port'] }}"
+        to_port: "{{ item['port'] }}"
+        cidr_ip: "{{ item['source'] }}"
+    purge_rules: no
+    purge_rules_egress: no
+  with_items: '{{ rules }}'
+

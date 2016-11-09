@@ -1,0 +1,8 @@
+---
+sg_name: sj_default
+sg_description: default_sg_for_ansible
+sg_region: us-east-1
+rules:
+  - proto: tcp
+    port: 22
+    source: 172.31.0.0/16
